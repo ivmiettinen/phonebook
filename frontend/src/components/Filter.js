@@ -4,11 +4,11 @@ import '../App.css';
 const Filter = ({ handleNameFilter, searchTerm }) => {
   return (
     <div className='center'>
-      <div style={filterDiv} className='filterDiv'>
+      <div style={filterDiv}>
         Filter shown with:
         <br />
         <input
-          className='filterField'
+          style={filterField}
           value={searchTerm}
           onChange={handleNameFilter}
           placeholder='Search'
@@ -18,13 +18,17 @@ const Filter = ({ handleNameFilter, searchTerm }) => {
   );
 };
 
+const filterField = {
+  textAlign: 'center',
+};
+
 const filterDiv = {
-  background: '#FFCB9C',
+  background: 'rgba(89, 91, 62, 0.57)',
   padding: '10px',
-  marginLeft: '10px',
+  margin: 'auto',
 
   borderRadius: '10pt',
-  width: '280px',
+  width: '240px',
 };
 
 export default Filter;

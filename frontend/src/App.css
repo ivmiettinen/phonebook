@@ -64,9 +64,6 @@ html {
 
 
 
-.filterField {
-  margin-left: 4px;
-}
  */
 
 table.center {
@@ -74,17 +71,25 @@ table.center {
   margin-right: auto;
 }
 
-.inputDiv {
+/* .inputDiv {
   display: inline-block;
   float: center;
+} */
+
+label {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: */
+  /* text-align: right; */
+  /* width: 400px; */
+  line-height: 26px;
+  /* justify-content: center; */
+    align-items: center;
+
 }
 
-.inputField1 {
-  margin-left: 15%;
-  margin-right: 15%;
-}
+input {
+  height: 20px;
+  flex: 0 0 200px;
 
-.inputField2 {
-  margin-left: 15%;
-  margin-right: 15%;
 }

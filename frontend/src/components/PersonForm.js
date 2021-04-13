@@ -8,27 +8,46 @@ const PersonForm = ({
   handleNumberChange,
   newNumber,
 }) => {
+  const changeBackground = (e) => {
+    e.target.style.background = 'rgba(3, 166, 27, 0.68)';
+  };
+
+  const changeBackground2 = (e) => {
+    e.target.style.background = '#2E8B57';
+  };
+
   return (
-    <div className='center'>
+    <div style={divCenter}>
       <div style={addPersonBox}>
         <form onSubmit={addNewPerson}>
-          <div className='inputDiv'>
-            Name:
+          Name:
+          <label style={nameLabel}>
             <input
-              className='inputField1'
+              style={nameInput}
+              name='nameInput'
               value={newName}
               onChange={handleNameChange}
+              placeholder='John Doe'
             />
-            Number:
+          </label>
+          Number:
+          <label style={numberLabel}>
             <input
-              className='inputField2'
+              style={numberInput}
+              name='numberInput'
               type='number'
               value={newNumber}
               onChange={handleNumberChange}
+              placeholder='0447351234'
             />
-          </div>
+          </label>
           <div style={submitButtonParagraph}>
-            <button style={addPersonButton} type='submit'>
+            <button
+              onMouseEnter={changeBackground}
+              onMouseLeave={changeBackground2}
+              style={addPersonButton}
+              type='submit'
+            >
               add
             </button>
           </div>
@@ -37,6 +56,29 @@ const PersonForm = ({
     </div>
   );
 };
+
+const nameLabel = {
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: '6px',
+};
+const nameInput = {
+  marginTop: '5px',
+  textAlign: 'center',
+};
+
+const numberLabel = {
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginBottom: '6px',
+};
+
+const numberInput = {
+  marginTop: '5px',
+  textAlign: 'center',
+};
+
+const divCenter = {};
 
 const submitButtonParagraph = {
   padding: '6px 6px',
@@ -53,12 +95,14 @@ const addPersonButton = {
 };
 
 const addPersonBox = {
-  background: '#FFCB9C',
-  padding: '10px',
-  float: 'left',
+  backgroundColor: 'rgba(89, 91, 62, 0.57)',
+  padding: '4px',
+  margin: 'auto',
 
   borderRadius: '10pt',
-  width: '280px',
+  width: '260px',
+
+  padding: '10px',
 };
 
 export default PersonForm;

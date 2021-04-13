@@ -101,7 +101,6 @@ const App = () => {
       noteServiceClient
         .create(personObject)
         .then((newObject) => {
-
           setPersons(persons.concat(newObject));
           setSuccessMessage(`Added ${newName}`);
           setTimeout(() => {
@@ -201,6 +200,9 @@ const App = () => {
 
 const phonebookHeader = {
   textDecorationLine: 'underline',
+  textAlign: 'center',
+
+  fontSize: '30px',
 };
 
 export default App;

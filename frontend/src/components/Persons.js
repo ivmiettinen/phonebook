@@ -13,7 +13,7 @@ const Persons = ({ results, handleDelete }) => {
 
   let mapping = results.map((result) => {
     return (
-      <div className='center' key={result.id}>
+      <div style={personsSpan} key={result.id}>
         <div style={lightGreyBox}>
           {result.name}: {result.number}
           <span className='buttonStyle1hover'>
@@ -37,13 +37,17 @@ const Persons = ({ results, handleDelete }) => {
   return <>{mapping}</>;
 };
 
-const lightGreyBox = {
-  backgroundColor: 'rgba(206, 208, 200, 0.49)',
-  padding: '8px',
-  margin: '3px',
+const personsSpan = {
+  margin: '7px',
+};
 
+const lightGreyBox = {
+  backgroundColor: 'rgba(206, 208, 200, 0.39)',
+  padding: '8px',
+  margin: 'auto',
   borderRadius: '10pt',
   width: '260px',
+  border: '1px solid rgba(89, 91, 62, 0.57)',
 };
 
 const buttonStyle1 = {
@@ -58,7 +62,7 @@ const buttonStyle1 = {
   border: '2px solid white',
   fontWeight: 'bold',
   display: 'inline-block',
-  borderRadius: '3px',
+  borderRadius: '10px',
 };
 
 export default Persons;
