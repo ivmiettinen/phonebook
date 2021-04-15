@@ -11,7 +11,7 @@ const Persons = ({ results, handleDelete }) => {
     e.target.style.color = '#fff';
   };
 
-  let mapping = results.map((result) => {
+  const mapping = results.map((result) => {
     return (
       <div style={personsSpan} key={result.id}>
         <div style={lightGreyBox}>
@@ -40,6 +40,8 @@ const Persons = ({ results, handleDelete }) => {
 const personsSpan = {
   margin: '7px',
 };
+
+
 
 const lightGreyBox = {
   backgroundColor: 'rgba(206, 208, 200, 0.39)',

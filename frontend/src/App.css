@@ -37,9 +37,6 @@
   }
 }
 
-/* .indexStyle {
-  -image: url('./pictures/brightCountryside.jpg');
-} */
 
 body,
 html {
@@ -48,33 +45,7 @@ html {
   background-attachment: fixed;
   background-size: cover;
 }
-/* 
-.buttonStyle1hover > div:hover{
-  color: #ed1212;
-		cursor: pointer;
-    background-color: #F5F5F5;
-} */
 
-/* .filterDiv {
-  margin-left: 14px;
-}
-
-
-
-
-
-
- */
-
-table.center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* .inputDiv {
-  display: inline-block;
-  float: center;
-} */
 
 label {
   display: flex;
@@ -92,4 +63,28 @@ input {
   height: 20px;
   flex: 0 0 200px;
 
+}
+
+
+.success {
+  color: green;
+  background-color: rgba(200, 208, 201, 0.79);
+  font-size: 20px;
+  font-weight: bold;
+  margin: 'auto';
+  width: '260px';
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.error {
+  color: red;
+  background-color: rgba(200, 208, 201, 0.79);
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
 }

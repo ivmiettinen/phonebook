@@ -40,9 +40,9 @@ const App = () => {
       number: newNumber,
     };
 
-    let copyOfPersons = [...persons];
+    const copyOfPersons = [...persons];
 
-    let mapPersons = copyOfPersons.map((param) => {
+    const mapPersons = copyOfPersons.map((param) => {
       return param.name;
     });
 
@@ -65,9 +65,9 @@ const App = () => {
         window.confirm(`${newName} is already added to phonebook, replace the
     old number with a new one?`)
       ) {
-        const mappia = persons.find(({ name }) => name === `${newName}`);
+        const findPerson = persons.find(({ name }) => name === `${newName}`);
 
-        const id = mappia.id;
+        const id = findPerson.id;
         const update = persons.find((n) => n.id === id);
         const changedNum = { ...update, number: personObject.number };
 
@@ -109,14 +109,13 @@ const App = () => {
         })
         .catch((error) => {
           // console.log("error.response.data:", error.response.data);
-
-          // console.log("objecti:", personObject);
-
-          let stringifyResult = JSON.stringify(error.response.data);
-          // let myJSON = JSON.stringify(moi1);
+          const stringifyResult = JSON.stringify(error.response.data);
 
           if (personObject.name.length < 3 || personObject.number.length < 8) {
             setErrorMessage(`${stringifyResult}`);
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 9000);
           }
         });
     }
@@ -147,9 +146,9 @@ const App = () => {
   const handleDelete = (e) => {
     const id = e.target.value;
 
-    let copyOfPersons = [...persons];
+    const copyOfPersons = [...persons];
 
-    let findId = { ...persons.find((param) => param.id === id) };
+    const findId = { ...persons.find((param) => param.id === id) };
 
     if (window.confirm(`Delete ${findId.name} ?`)) {
       noteServiceClient
