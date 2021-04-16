@@ -16,33 +16,10 @@ body {
   
 
   html{  
-    /* max-height: 100vh; */
-  
+   
     background-image: url('./images/pexels-photo-317355.jpeg');
     background-repeat: no-repeat;
-    
-
-    /* background-attachment: fixed; */
-   
-    /* position: fixed; */
-    /* top: 0px;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    z-index: -1; */
-    /* overflow: auto; */
-
     background-attachment: scroll;
-    /* background-size: cover;  */
-    /* background-position: left; */
-
-   
-
-    /* background-position: center;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover; */
 
   }
   
