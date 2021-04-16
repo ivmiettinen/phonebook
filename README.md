@@ -1,6 +1,6 @@
 -How to start:
 
-Clone the project. Run npm install.
+Clone the project. Run 'npm install' in both frontend and backend folders.
 
 -Frontend:
 

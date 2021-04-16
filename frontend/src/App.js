@@ -8,7 +8,7 @@ import noteServiceClient from './services/noteServiceClient';
 
 import Notification from './components/Notification';
 import SuccessMessage from './components/SuccessMessage';
-import './index.css';
+import './App.css';
 
 const App = () => {
   const [persons, setPersons] = useState([]);

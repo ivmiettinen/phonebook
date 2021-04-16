@@ -1,3 +1,5 @@
+
+
 .App {
   text-align: center;
 }
@@ -38,13 +40,6 @@
 }
 
 
-body,
-html {
-  background-image: url('./images/pexels-photo-317355.jpeg');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-}
 
 
 label {
@@ -76,7 +71,7 @@ input {
   border-style: solid;
   border-radius: 5px;
   padding: 10px;
-  margin-bottom: 10px;
+  margin: 10px;
 }
 
 .error {
@@ -86,5 +81,5 @@ input {
   border-style: solid;
   border-radius: 5px;
   padding: 10px;
-  margin-bottom: 10px;
+  margin: 10px;
 }

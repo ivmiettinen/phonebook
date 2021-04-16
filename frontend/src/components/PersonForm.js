@@ -1,5 +1,4 @@
 import React from 'react';
-import '../App.css';
 
 const PersonForm = ({
   addNewPerson,
@@ -96,7 +95,6 @@ const addPersonButton = {
 
 const addPersonBox = {
   backgroundColor: 'rgba(89, 91, 62, 0.57)',
-  padding: '4px',
   margin: 'auto',
 
   borderRadius: '10pt',
