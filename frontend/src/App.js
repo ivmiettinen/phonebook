@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
-import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 
 import serviceClient from './services/noteServiceClient'
@@ -10,7 +9,7 @@ import Notification from './components/Notification'
 import SuccessMessage from './components/SuccessMessage'
 import './App.css'
 import { Switch, Route, Redirect, useHistory } from 'react-router-dom'
-
+import Header from './components/Header'
 import AuthForm from './components/AuthForm'
 import loginService from './services/login'
 import registerService from './services/register'
@@ -28,6 +27,10 @@ const App = () => {
     const [showLogIn, setShowLogIn] = useState(false)
     // const [startMenu, setShowStartMenu] = useState(true)
     
+    const storedToken = localStorage.getItem('loggedBookappUser')
+
+    console.log('storedToken', storedToken)
+
     const history = useHistory()
     
     //Get data:
@@ -258,23 +261,23 @@ const App = () => {
                     />
                 </Route>
 
-                {loggedIn && (
+                {storedToken && (
                     <Route path='/phonebook'>
                         <div>
-                            <h2 style={phonebookHeader}>Phonebook</h2>
+                          <Header/>
+                            
 
-                            <Filter
-                                searchTerm={searchTerm}
-                                handleNameFilter={handleNameFilter}
-                            />
+                            
 
-                            <h3>Add a new person:</h3>
+                            
                             <PersonForm
                                 addNewPerson={addNewPerson}
                                 newName={newName}
                                 handleNameChange={handleNameChange}
                                 newNumber={newNumber}
                                 handleNumberChange={handleNumberChange}
+                                searchTerm={searchTerm}
+                                handleNameFilter={handleNameFilter}
                             />
 
                             <h3>Numbers: </h3>
@@ -292,11 +295,6 @@ const App = () => {
     )
 }
 
-const phonebookHeader = {
-    textDecorationLine: 'underline',
-    textAlign: 'center',
 
-    fontSize: '30px',
-}
 
 export default App
