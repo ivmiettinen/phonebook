@@ -1,17 +1,6 @@
 const personsRouter = require('express').Router()
 const Person = require('../models/person')
 
-//GET PERSONS-ROUTE:
-
-personsRouter.get('/', (req, res) => {
-    Person.find({}).then((persons) => {
-        console.log('aaaaaaaaaaaaa1')
-        // console.log('Does it work?')
-        console.log('LENGTH:', persons.length)
-        res.json(persons.map((person) => person.toJSON()))
-    })
-})
-
 //GET INFO-ROUTE:
 
 personsRouter.get('/info', (req, res) => {
@@ -26,9 +15,19 @@ personsRouter.get('/info', (req, res) => {
     })
 })
 
+//GET PERSONS-ROUTE:
+
+personsRouter.get('/', (req, res, next) => {
+    Person.find({})
+        .then((persons) => {
+            res.json(persons.map((person) => person.toJSON()))
+        })
+        .catch((error) => next(error))
+})
+
 //GET ONE PERSON-ROUTE
 
-personsRouter.get('/api/persons/:id', (req, res, next) => {
+personsRouter.get('/:id', (req, res, next) => {
     const id = req.params.id
     console.log('Haettu id', id)
 
@@ -45,7 +44,7 @@ personsRouter.get('/api/persons/:id', (req, res, next) => {
 
 //DELETE PERSON-ROUTE:
 
-personsRouter.delete('/api/persons/:id', (req, res, next) => {
+personsRouter.delete('/:id', (req, res, next) => {
     Person.findByIdAndRemove(req.params.id)
         .then(() => {
             res.status(204).end()
@@ -55,7 +54,7 @@ personsRouter.delete('/api/persons/:id', (req, res, next) => {
 
 //POST NEW PERSON-ROUTE:
 
-personsRouter.post('/api/persons', (req, res, next) => {
+personsRouter.post('/', (req, res, next) => {
     const body = req.body
 
     console.log('Request body:', body)
@@ -67,7 +66,6 @@ personsRouter.post('/api/persons', (req, res, next) => {
     const person = new Person({
         name: body.name,
         number: body.number,
-        // important: body.important || false,
         date: new Date(),
     })
 
@@ -78,16 +76,11 @@ personsRouter.post('/api/persons', (req, res, next) => {
             res.json(savedAndFormattedPerson)
         })
         .catch((error) => next(error))
-
-    //before:
-    // person.save().then(savedPerson => {
-    //   res.json(savedPerson.toJSON())
-    // }).catch(error => next(error))
 })
 
-//PUT:
+//PERSON PUT:
 
-personsRouter.put('/api/persons/:id', (request, response, next) => {
+personsRouter.put('/:id', (request, response, next) => {
     const body = request.body
 
     const person = {

@@ -12,6 +12,8 @@ app.use(cors())
 
 const personsRouter = require('./controllers/persons')
 
+const registerRouter = require('./controllers/register')
+
 app.use(express.static('build'))
 
 app.use(bodyParser.json())
@@ -37,6 +39,8 @@ app.listen(PORT, () => {
 })
 
 app.use('/api/persons', personsRouter)
+
+app.use('/api/register', registerRouter)
 
 //unknown endpoints:
 const unknownEndpoint = (request, response) => {

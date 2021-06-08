@@ -26,8 +26,7 @@ const personSchema = new mongoose.Schema({
     passwordHash: { type: String, minlength: 3, required: true },
     number: {
         type: String,
-        required: true,
-        minlength: 8
+        unique: true
     },
     numbers: [
         {
