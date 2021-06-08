@@ -9,6 +9,8 @@ import noteServiceClient from './services/noteServiceClient'
 import Notification from './components/Notification'
 import SuccessMessage from './components/SuccessMessage'
 import './App.css'
+import { Switch, Route, Redirect, useHistory } from 'react-router-dom'
+
 import AuthForm from './components/AuthForm'
 import loginService from './services/login'
 import registerService from './services/register'
@@ -24,9 +26,11 @@ const App = () => {
     const [loggedIn, setLoggedIn] = useState(false)
     const [showSignUp, setShowSignUp] = useState(false)
     const [showLogIn, setShowLogIn] = useState(false)
-    const [startMenu, setShowStartMenu] = useState(true)
+    // const [startMenu, setShowStartMenu] = useState(true)
+    
+    const history = useHistory()
+    
     //Get data:
-
     useEffect(() => {
         serviceClient
             .getAll()
@@ -42,10 +46,9 @@ const App = () => {
         console.log('userinfofff', userInfo)
         let user
         try {
-            if (loggedIn) {
+            if (showLogIn) {
                 user = await loginService.login(userInfo)
             } else {
-                console.log('tamaaa')
                 user = await registerService.register(userInfo)
             }
             setLoggedIn(true)
@@ -54,6 +57,7 @@ const App = () => {
                 JSON.stringify(user)
             )
             noteServiceClient.setToken(user.token)
+            history.push('/phonebook')
         } catch (exception) {
             console.log('expeeee', exception)
             console.log('error on login:', exception.response.data)
@@ -231,51 +235,59 @@ const App = () => {
         <div>
             <Notification errorMessage={errorMessage} />
             <SuccessMessage successMessage={successMessage} />
-            {!showSignUp || !showLogIn ? (
-                <SignIn
-                    setShowSignUp={setShowSignUp}
-                    setShowLogIn={setShowLogIn}
-                />
-            ) : (
-                <></>
-            )}
-            {showSignUp || showLogIn ? (
-                <AuthForm
-                    handleLogin={handleLogin}
-                    loggedIn={loggedIn}
-                    setErrorMessage={setErrorMessage}
-                />
-            ) : (
-                <></>
-            )}
-
-            {loggedIn && (
-                <div>
-                    <h2 style={phonebookHeader}>Phonebook</h2>
-
-                    <Filter
-                        searchTerm={searchTerm}
-                        handleNameFilter={handleNameFilter}
+            <Switch>
+                <Route path='/' exact>
+                    <SignIn
+                        setShowSignUp={setShowSignUp}
+                        setShowLogIn={setShowLogIn}
                     />
-
-                    <h3>Add a new person:</h3>
-                    <PersonForm
-                        addNewPerson={addNewPerson}
-                        newName={newName}
-                        handleNameChange={handleNameChange}
-                        newNumber={newNumber}
-                        handleNumberChange={handleNumberChange}
+                </Route>
+                <Route path='/login'>
+                    <AuthForm
+                        handleLogin={handleLogin}
+                        loggedIn={loggedIn}
+                        setErrorMessage={setErrorMessage}
+                        showLogIn={showLogIn}
                     />
-
-                    <h3>Numbers: </h3>
-
-                    <Persons
-                        results={results}
-                        handleDelete={handleDelete}
-                        personid={results.map((p) => p.id)}
+                </Route>
+                <Route path='/register'>
+                    <AuthForm
+                        handleLogin={handleLogin}
+                        loggedIn={loggedIn}
+                        setErrorMessage={setErrorMessage}
                     />
-                </div>
-            )}
+                </Route>
+
+                {loggedIn && (
+                    <Route path='/phonebook'>
+                        <div>
+                            <h2 style={phonebookHeader}>Phonebook</h2>
+
+                            <Filter
+                                searchTerm={searchTerm}
+                                handleNameFilter={handleNameFilter}
+                            />
+
+                            <h3>Add a new person:</h3>
+                            <PersonForm
+                                addNewPerson={addNewPerson}
+                                newName={newName}
+                                handleNameChange={handleNameChange}
+                                newNumber={newNumber}
+                                handleNumberChange={handleNumberChange}
+                            />
+
+                            <h3>Numbers: </h3>
+
+                            <Persons
+                                results={results}
+                                handleDelete={handleDelete}
+                                personid={results.map((p) => p.id)}
+                            />
+                        </div>
+                    </Route>
+                )}
+            </Switch>
         </div>
     )
 }

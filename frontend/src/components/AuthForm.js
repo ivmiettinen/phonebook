@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const AuthForm = ({ handleLogin, loggedIn, setErrorMessage }) => {
+const AuthForm = ({ handleLogin, loggedIn, setErrorMessage, showLogIn }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -31,7 +31,7 @@ const AuthForm = ({ handleLogin, loggedIn, setErrorMessage }) => {
     }
 
     return (
-        <div style={authButtons}>
+        <div style={authFormDiv}>
             <form onSubmit={handleSignIn}>
                 <h2>sign in</h2>
                 <p>
@@ -60,16 +60,26 @@ const AuthForm = ({ handleLogin, loggedIn, setErrorMessage }) => {
                     </label>
                 </p>
                 <p>
-                    <button type='submit'>
-                        {loggedIn ? 'Sign up' : 'login'}
+                    <button style={authFormButton} type='submit'>
+                        {showLogIn ? 'login' : 'Register' }
                     </button>
                 </p>
             </form>
         </div>
     )
 }
+const authFormButton = {
+    font: 'inherit',
+    border: 'rgba(222, 219, 230, 0.88)',
+    background: 'grey',
+    color: 'white',
+    padding: '0.25rem 1rem',
+    cursor: 'pointer',
+    borderRadius: '12px',
+    margin: '1rem',
+}
 
-const authButtons = {
+const authFormDiv = {
     padding: '3rem 0rem',
     margin: '2rem auto',
     width: '50rem',
