@@ -9,9 +9,10 @@ import noteServiceClient from './services/noteServiceClient'
 import Notification from './components/Notification'
 import SuccessMessage from './components/SuccessMessage'
 import './App.css'
-import LoginForm from './components/LoginForm'
+import AuthForm from './components/AuthForm'
 import loginService from './services/login'
 import registerService from './services/register'
+import SignIn from './components/SignIn'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -21,7 +22,9 @@ const App = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     const [successMessage, setSuccessMessage] = useState(null)
     const [loggedIn, setLoggedIn] = useState(false)
-
+    const [showSignUp, setShowSignUp] = useState(false)
+    const [showLogIn, setShowLogIn] = useState(false)
+    const [startMenu, setShowStartMenu] = useState(true)
     //Get data:
 
     useEffect(() => {
@@ -56,9 +59,7 @@ const App = () => {
             console.log('error on login:', exception.response.data)
 
             if (JSON.stringify(exception.response.data).includes('unique')) {
-                setErrorMessage(
-                    `Email '${userInfo.email}' is already in use`
-                )
+                setErrorMessage(`Email '${userInfo.email}' is already in use`)
 
                 setTimeout(() => {
                     setErrorMessage(null)
@@ -230,7 +231,25 @@ const App = () => {
         <div>
             <Notification errorMessage={errorMessage} />
             <SuccessMessage successMessage={successMessage} />
-            {loggedIn ? (
+            {!showSignUp || !showLogIn ? (
+                <SignIn
+                    setShowSignUp={setShowSignUp}
+                    setShowLogIn={setShowLogIn}
+                />
+            ) : (
+                <></>
+            )}
+            {showSignUp || showLogIn ? (
+                <AuthForm
+                    handleLogin={handleLogin}
+                    loggedIn={loggedIn}
+                    setErrorMessage={setErrorMessage}
+                />
+            ) : (
+                <></>
+            )}
+
+            {loggedIn && (
                 <div>
                     <h2 style={phonebookHeader}>Phonebook</h2>
 
@@ -256,12 +275,6 @@ const App = () => {
                         personid={results.map((p) => p.id)}
                     />
                 </div>
-            ) : (
-                <LoginForm
-                    handleLogin={handleLogin}
-                    loggedIn={loggedIn}
-                    setErrorMessage={setErrorMessage}
-                />
             )}
         </div>
     )

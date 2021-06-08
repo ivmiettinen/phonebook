@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const LoginForm = ({ handleLogin, loggedIn, setErrorMessage }) => {
+const AuthForm = ({ handleLogin, loggedIn, setErrorMessage }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
@@ -81,7 +81,6 @@ const authButtons = {
     fontSize: '24px',
     textAlign: 'center',
     backgroundColor: 'rgba(206, 208, 200, 0.88)',
-    // background: 'transparent',
 
     flexDirection: 'column',
     alignItems: 'center',
@@ -107,4 +106,4 @@ const LoginformInput = {
     borderRadius: '3.5px',
 }
 
-export default LoginForm
+export default AuthForm
