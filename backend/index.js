@@ -10,9 +10,13 @@ const cors = require('cors')
 
 app.use(cors())
 
+const loginRouter = require('./controllers/login')
+
 const personsRouter = require('./controllers/persons')
 
 const registerRouter = require('./controllers/register')
+
+
 
 app.use(express.static('build'))
 
@@ -38,9 +42,13 @@ app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
 
+app.use('/api/login', loginRouter)
+
 app.use('/api/persons', personsRouter)
 
 app.use('/api/register', registerRouter)
+
+
 
 //unknown endpoints:
 const unknownEndpoint = (request, response) => {
