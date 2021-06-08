@@ -1,207 +1,277 @@
-import React, { useState, useEffect } from 'react';
-import Persons from './components/Persons';
-import Filter from './components/Filter';
-import PersonForm from './components/PersonForm';
+import React, { useState, useEffect } from 'react'
+import Persons from './components/Persons'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
 
-import serviceClient from './services/noteServiceClient';
-import noteServiceClient from './services/noteServiceClient';
+import serviceClient from './services/noteServiceClient'
+import noteServiceClient from './services/noteServiceClient'
 
-import Notification from './components/Notification';
-import SuccessMessage from './components/SuccessMessage';
-import './App.css';
+import Notification from './components/Notification'
+import SuccessMessage from './components/SuccessMessage'
+import './App.css'
+import LoginForm from './components/LoginForm'
+import loginService from './services/login'
+import registerService from './services/register'
 
 const App = () => {
-  const [persons, setPersons] = useState([]);
-  const [newName, setNewName] = useState('');
-  const [newNumber, setnewNumber] = useState('');
-  const [searchTerm, setsearchTerm] = useState('');
-  const [errorMessage, setErrorMessage] = useState(null);
+    const [persons, setPersons] = useState([])
+    const [newName, setNewName] = useState('')
+    const [newNumber, setnewNumber] = useState('')
+    const [searchTerm, setsearchTerm] = useState('')
+    const [errorMessage, setErrorMessage] = useState(null)
+    const [successMessage, setSuccessMessage] = useState(null)
+    const [loggedIn, setLoggedIn] = useState(false)
 
-  const [successMessage, setSuccessMessage] = useState(null);
+    //Get data:
 
-  //Get data:
+    useEffect(() => {
+        serviceClient
+            .getAll()
+            .then((initialPersons) => {
+                setPersons(initialPersons)
+            })
+            .catch((error) => {
+                console.log('error', error)
+            })
+    }, [])
 
-  useEffect(() => {
-    serviceClient
-      .getAll()
-      .then((initialPersons) => {
-        setPersons(initialPersons);
-      })
-      .catch((error) => {
-        console.log('error', error);
-      });
-  }, []);
+    const handleLogin = async (userInfo) => {
+        console.log('userinfofff', userInfo)
+        let user
+        try {
+            if (loggedIn) {
+                user = await loginService.login(userInfo)
+            } else {
+                console.log('tamaaa')
+                user = await registerService.register(userInfo)
+            }
+            setLoggedIn(true)
+            window.localStorage.setItem(
+                'loggedBookappUser',
+                JSON.stringify(user)
+            )
+            noteServiceClient.setToken(user.token)
+        } catch (exception) {
+            console.log('expeeee', exception)
+            console.log('error on login:', exception.response.data)
 
-  const addNewPerson = (e) => {
-    e.preventDefault();
+            if (JSON.stringify(exception.response.data).includes('unique')) {
+                setErrorMessage(
+                    `Email '${userInfo.email}' is already in use`
+                )
 
-    const personObject = {
-      name: newName,
-      number: newNumber,
-    };
+                setTimeout(() => {
+                    setErrorMessage(null)
+                }, 5000)
+            } else if (
+                JSON.stringify(exception.response.data).includes(
+                    'invalid email or password'
+                )
+            ) {
+                setErrorMessage('Invalid email or password')
 
-    const copyOfPersons = [...persons];
-
-    const mapPersons = copyOfPersons.map((param) => {
-      return param.name;
-    });
-
-    if (
-      mapPersons.includes(personObject.name) &&
-      personObject.number.length === 0
-    ) {
-      alert(`${newName} is already added to phonebook`);
-
-      return;
+                setTimeout(() => {
+                    setErrorMessage(null)
+                }, 5000)
+            }
+        }
     }
 
-    //Modify phone number of person in a list:
+    const addNewPerson = (e) => {
+        e.preventDefault()
 
-    if (
-      mapPersons.includes(personObject.name) &&
-      personObject.number.length > 0
-    ) {
-      if (
-        window.confirm(`${newName} is already added to phonebook, replace the
+        const personObject = {
+            name: newName,
+            number: newNumber,
+        }
+
+        const copyOfPersons = [...persons]
+
+        const mapPersons = copyOfPersons.map((param) => {
+            return param.name
+        })
+
+        if (
+            mapPersons.includes(personObject.name) &&
+            personObject.number.length === 0
+        ) {
+            alert(`${newName} is already added to phonebook`)
+
+            return
+        }
+
+        //Modify phone number of person in a list:
+
+        if (
+            mapPersons.includes(personObject.name) &&
+            personObject.number.length > 0
+        ) {
+            if (
+                window.confirm(`${newName} is already added to phonebook, replace the
     old number with a new one?`)
-      ) {
-        const findPerson = persons.find(({ name }) => name === `${newName}`);
+            ) {
+                const findPerson = persons.find(
+                    ({ name }) => name === `${newName}`
+                )
 
-        const id = findPerson.id;
-        const update = persons.find((n) => n.id === id);
-        const changedNum = { ...update, number: personObject.number };
+                const id = findPerson.id
+                const update = persons.find((n) => n.id === id)
+                const changedNum = { ...update, number: personObject.number }
 
-        noteServiceClient
-          .update(id, changedNum)
-          .then((returnedPerson) => {
-            setPersons(
-              persons.map((per) => (per.id !== id ? per : returnedPerson))
-            );
-            setSuccessMessage(`Changed ${newName}'s phone number successfully`);
-            setTimeout(() => {
-              setSuccessMessage(null);
-            }, 5000);
-          })
+                noteServiceClient
+                    .update(id, changedNum)
+                    .then((returnedPerson) => {
+                        setPersons(
+                            persons.map((per) =>
+                                per.id !== id ? per : returnedPerson
+                            )
+                        )
+                        setSuccessMessage(
+                            `Changed ${newName}'s phone number successfully`
+                        )
+                        setTimeout(() => {
+                            setSuccessMessage(null)
+                        }, 5000)
+                    })
 
-          .catch((error) => {
-            console.log('error on put:', error);
-            setErrorMessage(
-              `Information of ${newName} has already been removed from server`
-            );
-            setTimeout(() => {
-              setErrorMessage(null);
-            }, 5000);
-            setPersons(persons.filter((n) => n.id !== id));
-          });
-      }
+                    .catch((error) => {
+                        console.log('error on put:', error)
+                        setErrorMessage(
+                            `Information of ${newName} has already been removed from server`
+                        )
+                        setTimeout(() => {
+                            setErrorMessage(null)
+                        }, 5000)
+                        setPersons(persons.filter((n) => n.id !== id))
+                    })
+            }
+        }
+
+        //create person:
+        else {
+            noteServiceClient
+                .create(personObject)
+                .then((newObject) => {
+                    setPersons(persons.concat(newObject))
+                    setSuccessMessage(`Added ${newName}`)
+                    setTimeout(() => {
+                        setSuccessMessage(null)
+                    }, 5000)
+                })
+                .catch((error) => {
+                    // console.log("error.response.data:", error.response.data);
+                    const stringifyResult = JSON.stringify(error.response.data)
+
+                    if (
+                        personObject.name.length < 3 ||
+                        personObject.number.length < 8
+                    ) {
+                        setErrorMessage(`${stringifyResult}`)
+                        setTimeout(() => {
+                            setErrorMessage(null)
+                        }, 9000)
+                    }
+                })
+        }
+
+        setNewName('')
+
+        setnewNumber('')
     }
 
-    //create person:
-    else {
-      noteServiceClient
-        .create(personObject)
-        .then((newObject) => {
-          setPersons(persons.concat(newObject));
-          setSuccessMessage(`Added ${newName}`);
-          setTimeout(() => {
-            setSuccessMessage(null);
-          }, 5000);
-        })
-        .catch((error) => {
-          // console.log("error.response.data:", error.response.data);
-          const stringifyResult = JSON.stringify(error.response.data);
-
-          if (personObject.name.length < 3 || personObject.number.length < 8) {
-            setErrorMessage(`${stringifyResult}`);
-            setTimeout(() => {
-              setErrorMessage(null);
-            }, 9000);
-          }
-        });
+    const handleNameChange = (e) => {
+        setNewName(e.target.value)
     }
 
-    setNewName('');
-
-    setnewNumber('');
-  };
-
-  const handleNameChange = (e) => {
-    setNewName(e.target.value);
-  };
-
-  const handleNumberChange = (e) => {
-    setnewNumber(e.target.value);
-  };
-
-  const handleNameFilter = (e) => {
-    setsearchTerm(e.target.value);
-  };
-
-  const results = !searchTerm
-    ? persons
-    : persons.filter((param) =>
-        param.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
-      );
-
-  const handleDelete = (e) => {
-    const id = e.target.value;
-
-    const copyOfPersons = [...persons];
-
-    const findId = { ...persons.find((param) => param.id === id) };
-
-    if (window.confirm(`Delete ${findId.name} ?`)) {
-      noteServiceClient
-        .remove(id)
-        .then(() => {
-          const filterById = copyOfPersons.filter((param) => param.id !== id);
-
-          setPersons(filterById);
-          setSuccessMessage(`Deleted name '${findId.name}' successfully`);
-          setTimeout(() => {
-            setSuccessMessage(null);
-          }, 5000);
-        })
-        .catch((error) => {
-          console.log('delete error:', error);
-        });
+    const handleNumberChange = (e) => {
+        setnewNumber(e.target.value)
     }
-  };
 
-  return (
-    <div>
-      <h2 style={phonebookHeader}>Phonebook</h2>
+    const handleNameFilter = (e) => {
+        setsearchTerm(e.target.value)
+    }
 
-      <Notification errorMessage={errorMessage} />
-      <SuccessMessage successMessage={successMessage} />
+    const results = !searchTerm
+        ? persons
+        : persons.filter((param) =>
+              param.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
+          )
 
-      <Filter searchTerm={searchTerm} handleNameFilter={handleNameFilter} />
+    const handleDelete = (e) => {
+        const id = e.target.value
 
-      <h3>Add a new person:</h3>
-      <PersonForm
-        addNewPerson={addNewPerson}
-        newName={newName}
-        handleNameChange={handleNameChange}
-        newNumber={newNumber}
-        handleNumberChange={handleNumberChange}
-      />
+        const copyOfPersons = [...persons]
 
-      <h3>Numbers: </h3>
+        const findId = { ...persons.find((param) => param.id === id) }
 
-      <Persons
-        results={results}
-        handleDelete={handleDelete}
-        personid={results.map((p) => p.id)}
-      />
-    </div>
-  );
-};
+        if (window.confirm(`Delete ${findId.name} ?`)) {
+            noteServiceClient
+                .remove(id)
+                .then(() => {
+                    const filterById = copyOfPersons.filter(
+                        (param) => param.id !== id
+                    )
+
+                    setPersons(filterById)
+                    setSuccessMessage(
+                        `Deleted name '${findId.name}' successfully`
+                    )
+                    setTimeout(() => {
+                        setSuccessMessage(null)
+                    }, 5000)
+                })
+                .catch((error) => {
+                    console.log('delete error:', error)
+                })
+        }
+    }
+
+    return (
+        <div>
+            <Notification errorMessage={errorMessage} />
+            <SuccessMessage successMessage={successMessage} />
+            {loggedIn ? (
+                <div>
+                    <h2 style={phonebookHeader}>Phonebook</h2>
+
+                    <Filter
+                        searchTerm={searchTerm}
+                        handleNameFilter={handleNameFilter}
+                    />
+
+                    <h3>Add a new person:</h3>
+                    <PersonForm
+                        addNewPerson={addNewPerson}
+                        newName={newName}
+                        handleNameChange={handleNameChange}
+                        newNumber={newNumber}
+                        handleNumberChange={handleNumberChange}
+                    />
+
+                    <h3>Numbers: </h3>
+
+                    <Persons
+                        results={results}
+                        handleDelete={handleDelete}
+                        personid={results.map((p) => p.id)}
+                    />
+                </div>
+            ) : (
+                <LoginForm
+                    handleLogin={handleLogin}
+                    loggedIn={loggedIn}
+                    setErrorMessage={setErrorMessage}
+                />
+            )}
+        </div>
+    )
+}
 
 const phonebookHeader = {
-  textDecorationLine: 'underline',
-  textAlign: 'center',
+    textDecorationLine: 'underline',
+    textAlign: 'center',
 
-  fontSize: '30px',
-};
+    fontSize: '30px',
+}
 
-export default App;
+export default App
