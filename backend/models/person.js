@@ -17,17 +17,24 @@ mongoose
     })
 
 const personSchema = new mongoose.Schema({
-    name: {
+    email: {
         type: String,
         minlength: 3,
         required: true,
         unique: true
     },
+    passwordHash: { type: String, minlength: 3, required: true },
     number: {
         type: String,
         required: true,
         minlength: 8
     },
+    numbers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'number',
+        },
+    ],
 })
 
 //Apply the uniqueValidator plugin to userSchema:
@@ -40,6 +47,7 @@ personSchema.set('toJSON', {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
+        delete returnedObject.passwordHash
     },
 })
 
