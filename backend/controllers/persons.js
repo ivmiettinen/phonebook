@@ -1,10 +1,11 @@
 const personsRouter = require('express').Router()
 const Person = require('../models/person')
+const phoneNumber = require('../models/phoneNumber')
 
 //GET INFO-ROUTE:
 
 personsRouter.get('/info', (req, res) => {
-    Person.find({}).then((persons) => {
+    phoneNumber.find({}).then((persons) => {
         // console.log('LENGTH:', persons.length)
 
         res.send(
@@ -63,7 +64,7 @@ personsRouter.post('/', (req, res, next) => {
         return res.status(400).json({ error: 'content missing' })
     }
 
-    const person = new Person({
+    const person = new phoneNumber({
         name: body.name,
         number: body.number,
         date: new Date(),

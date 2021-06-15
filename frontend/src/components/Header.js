@@ -21,13 +21,9 @@ const headerStyle = {
     backgroundColor: 'rgba(89, 91, 62, 0.77)',
     color: '#080808   ',
     display: 'flex',
-    // justifyContent: 'space-between',
     alignItems: 'center',
     padding: '0 10%',
     opacity: '80%',
-   
-
-    // zindex: '10',
 }
 
 const logoutStyle = {
