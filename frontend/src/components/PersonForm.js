@@ -19,19 +19,17 @@ const PersonForm = ({
         e.target.style.background = '#2E8B57'
     }
 
-    const div123 = {
+    const peronFormStyle = {
         position: 'relative',
         marginTop: '7rem',
     }
 
     return (
-        <div style={div123}>
-            {/* <Header/> */}
+        <div style={peronFormStyle}>
             <Filter
                                 searchTerm={searchTerm}
                                 handleNameFilter={handleNameFilter}
                             />
-            <h2 style={phonebookHeader}>Phonebook</h2>
             <div style={addPersonBox}>
                 <h3>Add a new person:</h3>
                 <form onSubmit={addNewPerson}>
@@ -110,6 +108,7 @@ const addPersonButton = {
 const addPersonBox = {
     backgroundColor: 'rgba(89, 91, 62, 0.57)',
     margin: 'auto',
+    marginTop: '1.5rem',
 
     borderRadius: '10pt',
     width: '260px',
@@ -117,11 +116,6 @@ const addPersonBox = {
     padding: '10px',
 }
 
-const phonebookHeader = {
-    textDecorationLine: 'underline',
-    textAlign: 'center',
 
-    fontSize: '30px',
-}
 
 export default PersonForm

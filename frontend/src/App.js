@@ -26,13 +26,13 @@ const App = () => {
     const [showSignUp, setShowSignUp] = useState(false)
     const [showLogIn, setShowLogIn] = useState(false)
     // const [startMenu, setShowStartMenu] = useState(true)
-    
+
     const storedToken = localStorage.getItem('loggedBookappUser')
 
     console.log('storedToken', storedToken)
 
     const history = useHistory()
-    
+
     //Get data:
     useEffect(() => {
         serviceClient
@@ -234,6 +234,18 @@ const App = () => {
         }
     }
 
+    const logOut = () => {
+        window.localStorage.clear()
+        noteServiceClient.setToken(null)
+        // setUser(null)
+        // setShowSignUp(false)
+        // setShowLogIn(false)
+        setSuccessMessage('Successfully logged out')
+        setTimeout(() => {
+            setSuccessMessage(null)
+        }, 5000)
+    }
+
     return (
         <div>
             <Notification errorMessage={errorMessage} />
@@ -261,40 +273,32 @@ const App = () => {
                     />
                 </Route>
 
-                {storedToken && (
-                    <Route path='/phonebook'>
-                        <div>
-                          <Header/>
-                            
+                <Route path='/phonebook'>
+                    <div>
+                        <Header logOut={logOut} />
 
-                            
+                        <PersonForm
+                            addNewPerson={addNewPerson}
+                            newName={newName}
+                            handleNameChange={handleNameChange}
+                            newNumber={newNumber}
+                            handleNumberChange={handleNumberChange}
+                            searchTerm={searchTerm}
+                            handleNameFilter={handleNameFilter}
+                        />
 
-                            
-                            <PersonForm
-                                addNewPerson={addNewPerson}
-                                newName={newName}
-                                handleNameChange={handleNameChange}
-                                newNumber={newNumber}
-                                handleNumberChange={handleNumberChange}
-                                searchTerm={searchTerm}
-                                handleNameFilter={handleNameFilter}
-                            />
+                        <h3>Numbers: </h3>
 
-                            <h3>Numbers: </h3>
-
-                            <Persons
-                                results={results}
-                                handleDelete={handleDelete}
-                                personid={results.map((p) => p.id)}
-                            />
-                        </div>
-                    </Route>
-                )}
+                        <Persons
+                            results={results}
+                            handleDelete={handleDelete}
+                            personid={results.map((p) => p.id)}
+                        />
+                    </div>
+                </Route>
             </Switch>
         </div>
     )
 }
-
-
 
 export default App
