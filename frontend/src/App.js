@@ -205,7 +205,7 @@ const App = () => {
               param.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
           )
 
-        //   console.log('results', results.filter((p) => p.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())))
+    //   console.log('results', results.filter((p) => p.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())))
 
     const handleDelete = (e) => {
         const id = e.target.value
@@ -250,8 +250,6 @@ const App = () => {
 
     return (
         <div>
-            <ErrorMessage errorMessage={errorMessage} />
-            <SuccessMessage successMessage={successMessage} />
             <Switch>
                 <Route path='/' exact>
                     <SignIn
@@ -278,7 +276,8 @@ const App = () => {
                     <Route path='/phonebook'>
                         <div>
                             <Header logOut={logOut} />
-
+                            <ErrorMessage errorMessage={errorMessage} />
+                            <SuccessMessage successMessage={successMessage} />
                             <PersonForm
                                 addNewPerson={addNewPerson}
                                 newName={newName}

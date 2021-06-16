@@ -14,24 +14,16 @@ input {
 }
 
 .success {
-  color: green;
-  background-color: rgba(200, 208, 201, 0.79);
   font-size: 20px;
   font-weight: bold;
   margin: 'auto';
   width: '260px';
-  border-style: solid;
   border-radius: 5px;
-  padding: 10px;
   margin: 10px;
 }
 
 .error {
-  color: red;
-  background-color: rgba(200, 208, 201, 0.79);
   font-size: 20px;
-  border-style: solid;
   border-radius: 5px;
-  padding: 10px;
   margin: 10px;
 }

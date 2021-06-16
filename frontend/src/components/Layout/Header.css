@@ -24,15 +24,21 @@
     flex: 1;
   }
 
-  .logOutButton{    cursor: pointer;
+  .logOutButton{    
+    cursor: pointer;
     font: inherit;
     border: none;
     background-color: rgba(46, 46, 45, 0.42);
     color: white;
     padding: 0.5rem;
-
     border-radius: 1rem;
     }
+
+    .logOutButton:hover {
+      background-color: rgba(59, 59, 59, 0.42);
+      opacity: 0.8;
+    }
+
   .headerButton{   
     font: inherit;
     border: none;
