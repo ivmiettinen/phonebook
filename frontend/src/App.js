@@ -5,15 +5,15 @@ import PersonForm from './components/PersonForm'
 import serviceClient from './services/noteServiceClient'
 import noteServiceClient from './services/noteServiceClient'
 
-import Notification from './components/Notification'
-import SuccessMessage from './components/SuccessMessage'
+import ErrorMessage from './components/Messages/ErrorMessage'
+import SuccessMessage from './components/Messages/SuccessMessage'
 import './App.css'
-import { Switch, Route, Redirect, useHistory } from 'react-router-dom'
-import Header from './components/Header'
-import AuthForm from './components/AuthForm'
+import { Switch, Route, useHistory } from 'react-router-dom'
+import Header from './components/Layout/Header'
+import AuthForm from './components/SignIn/AuthForm'
 import loginService from './services/login'
 import registerService from './services/register'
-import SignIn from './components/SignIn'
+import SignIn from './components/SignIn/SignIn'
 
 const App = () => {
     const [persons, setPersons] = useState([])
@@ -205,6 +205,8 @@ const App = () => {
               param.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
           )
 
+        //   console.log('results', results.filter((p) => p.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())))
+
     const handleDelete = (e) => {
         const id = e.target.value
 
@@ -237,9 +239,9 @@ const App = () => {
     const logOut = () => {
         window.localStorage.clear()
         noteServiceClient.setToken(null)
-        // setUser(null)
-        // setShowSignUp(false)
-        // setShowLogIn(false)
+        setShowSignUp(false)
+        setShowLogIn(false)
+        setLoggedIn(false)
         setSuccessMessage('Successfully logged out')
         setTimeout(() => {
             setSuccessMessage(null)
@@ -248,7 +250,7 @@ const App = () => {
 
     return (
         <div>
-            <Notification errorMessage={errorMessage} />
+            <ErrorMessage errorMessage={errorMessage} />
             <SuccessMessage successMessage={successMessage} />
             <Switch>
                 <Route path='/' exact>
@@ -272,30 +274,31 @@ const App = () => {
                         setErrorMessage={setErrorMessage}
                     />
                 </Route>
+                {(loggedIn || storedToken) && (
+                    <Route path='/phonebook'>
+                        <div>
+                            <Header logOut={logOut} />
 
-                <Route path='/phonebook'>
-                    <div>
-                        <Header logOut={logOut} />
+                            <PersonForm
+                                addNewPerson={addNewPerson}
+                                newName={newName}
+                                handleNameChange={handleNameChange}
+                                newNumber={newNumber}
+                                handleNumberChange={handleNumberChange}
+                                searchTerm={searchTerm}
+                                handleNameFilter={handleNameFilter}
+                            />
 
-                        <PersonForm
-                            addNewPerson={addNewPerson}
-                            newName={newName}
-                            handleNameChange={handleNameChange}
-                            newNumber={newNumber}
-                            handleNumberChange={handleNumberChange}
-                            searchTerm={searchTerm}
-                            handleNameFilter={handleNameFilter}
-                        />
+                            <h3>Numbers: </h3>
 
-                        <h3>Numbers: </h3>
-
-                        <Persons
-                            results={results}
-                            handleDelete={handleDelete}
-                            personid={results.map((p) => p.id)}
-                        />
-                    </div>
-                </Route>
+                            <Persons
+                                results={results}
+                                handleDelete={handleDelete}
+                                personid={results.map((p) => p.id)}
+                            />
+                        </div>
+                    </Route>
+                )}
             </Switch>
         </div>
     )

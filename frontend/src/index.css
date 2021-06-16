@@ -6,6 +6,7 @@ body {
         'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    
 }
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -14,7 +15,7 @@ code {
 
 html {
     background-image: url('./images/pexels-photo-317355.jpeg');
-    /* background-repeat: no-repeat; */
-    background-attachment: scroll;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     background-size: cover;
 }

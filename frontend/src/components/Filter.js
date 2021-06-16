@@ -4,7 +4,7 @@ const Filter = ({ handleNameFilter, searchTerm }) => {
   return (
     <div className='center'>
       <div style={filterDiv}>
-        Filter shown with:
+        Search names:
         <br />
         <input
           style={filterField}
