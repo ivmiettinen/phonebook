@@ -14,7 +14,7 @@ app.use(cors())
 
 const loginRouter = require('./controllers/login')
 
-const personsRouter = require('./controllers/persons')
+const numbersRouter = require('./controllers/numbers')
 
 const registerRouter = require('./controllers/register')
 
@@ -67,7 +67,7 @@ mongoose
 
 app.use('/api/login', loginRouter)
 
-app.use('/api/persons', personsRouter)
+app.use('/api/persons', numbersRouter)
 
 app.use('/api/register', registerRouter)
 

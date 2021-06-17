@@ -6,20 +6,21 @@ const phoneNumberSchema = new mongoose.Schema({
         type: String,
         minlength: 3,
         required: true,
+        sparse: true,
     },
     number: {
         type: String,
         required: true,
         unique: true,
     },
-    person: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Person',
-        },
-    ],
+    date: {
+        type: String,
+    },
+    person: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Person',
+    },
 })
-
 
 phoneNumberSchema.set('toJSON', {
     transform: (document, returnedObject) => {

@@ -1,11 +1,11 @@
-const personsRouter = require('express').Router()
-const Person = require('../models/person')
-const phoneNumber = require('../models/phoneNumber')
+const numbersRouter = require('express').Router()
+const PhoneNumber = require('../models/phoneNumber')
+const jwt = require('jsonwebtoken')
 
 //GET INFO-ROUTE:
 
-personsRouter.get('/info', (req, res) => {
-    phoneNumber.find({}).then((persons) => {
+numbersRouter.get('/info', (req, res) => {
+    PhoneNumber.find({}).then((persons) => {
         // console.log('LENGTH:', persons.length)
 
         res.send(
@@ -18,8 +18,8 @@ personsRouter.get('/info', (req, res) => {
 
 //GET PERSONS-ROUTE:
 
-personsRouter.get('/', (req, res, next) => {
-    phoneNumber
+numbersRouter.get('/', (req, res, next) => {
+    PhoneNumber
         .find({})
         .then((numbers) => {
             res.json(numbers.map((nums) => nums.toJSON()))
@@ -29,11 +29,11 @@ personsRouter.get('/', (req, res, next) => {
 
 //GET ONE PERSON-ROUTE
 
-personsRouter.get('/:id', (req, res, next) => {
+numbersRouter.get('/:id', (req, res, next) => {
     const id = req.params.id
     console.log('Haettu id', id)
 
-    Person.findById(req.params.id)
+    PhoneNumber.findById(req.params.id)
         .then((person) => {
             if (person) {
                 res.json(person.toJSON())
@@ -46,8 +46,9 @@ personsRouter.get('/:id', (req, res, next) => {
 
 //DELETE PERSON-ROUTE:
 
-personsRouter.delete('/:id', (req, res, next) => {
-    Person.findByIdAndRemove(req.params.id)
+numbersRouter.delete('/:id', (req, res, next) => {
+
+    PhoneNumber.findByIdAndRemove(req.params.id)
         .then(() => {
             res.status(204).end()
         })
@@ -56,7 +57,7 @@ personsRouter.delete('/:id', (req, res, next) => {
 
 //POST NEW PERSON-ROUTE:
 
-personsRouter.post('/', (req, res, next) => {
+numbersRouter.post('/', (req, res, next) => {
     const body = req.body
 
     console.log('Request body:', body)
@@ -65,10 +66,11 @@ personsRouter.post('/', (req, res, next) => {
         return res.status(400).json({ error: 'content missing' })
     }
 
-    const person = new phoneNumber({
+    const person = new PhoneNumber({
         name: body.name,
         number: body.number,
         date: new Date(),
+
     })
 
     person
@@ -82,7 +84,7 @@ personsRouter.post('/', (req, res, next) => {
 
 //PERSON PUT:
 
-personsRouter.put('/:id', (request, response, next) => {
+numbersRouter.put('/:id', (request, response, next) => {
     const body = request.body
 
     const person = {
@@ -90,11 +92,11 @@ personsRouter.put('/:id', (request, response, next) => {
         number: body.number,
     }
 
-    Person.findByIdAndUpdate(request.params.id, person, { new: true })
+    PhoneNumber.findByIdAndUpdate(request.params.id, person, { new: true })
         .then((updatedPerson) => {
             response.json(updatedPerson.toJSON())
         })
         .catch((error) => next(error))
 })
 
-module.exports = personsRouter
+module.exports = numbersRouter

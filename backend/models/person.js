@@ -12,7 +12,7 @@ const personSchema = mongoose.Schema({
     numbers: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'phoneNumber',
+            ref: 'Number',
         },
     ],
 })

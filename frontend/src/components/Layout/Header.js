@@ -6,7 +6,6 @@ const Header = ({ logOut }) => {
     const history = useHistory()
 
     const handleLogout = () => {
-        console.log('clickclck')
         logOut()
         history.push('/')
     }
