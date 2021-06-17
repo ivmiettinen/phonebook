@@ -8,7 +8,6 @@ const AuthForm = ({ handleLogin, loggedIn, setErrorMessage, showLogIn }) => {
         e.preventDefault()
 
         if (email.trim().length < 3) {
-            console.log('arg')
             setErrorMessage('Email must be at least 3 characters long.')
             setTimeout(() => {
                 setErrorMessage(null)

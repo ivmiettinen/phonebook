@@ -19,9 +19,10 @@ personsRouter.get('/info', (req, res) => {
 //GET PERSONS-ROUTE:
 
 personsRouter.get('/', (req, res, next) => {
-    Person.find({})
-        .then((persons) => {
-            res.json(persons.map((person) => person.toJSON()))
+    phoneNumber
+        .find({})
+        .then((numbers) => {
+            res.json(numbers.map((nums) => nums.toJSON()))
         })
         .catch((error) => next(error))
 })

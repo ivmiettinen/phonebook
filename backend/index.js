@@ -4,6 +4,8 @@ const express = require('express')
 
 const app = express()
 
+const mongoose = require('mongoose')
+
 const bodyParser = require('body-parser')
 
 const cors = require('cors')
@@ -41,6 +43,27 @@ const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
+
+
+
+const url = process.env.MONGODB_URI
+
+console.log('connecting to', url)
+mongoose
+    .connect(url, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+    })
+    .then(() => {
+        console.log('connected to MongoDB')
+    })
+    .catch((error) => {
+        console.log('error connecting to MongoDB:', error.message)
+    })
+
+
+
 
 app.use('/api/login', loginRouter)
 

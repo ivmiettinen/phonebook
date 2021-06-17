@@ -1,6 +1,6 @@
 import React from 'react'
 import Filter from './Filter'
-// import Header from './Header'
+
 
 const PersonForm = ({
     addNewPerson,

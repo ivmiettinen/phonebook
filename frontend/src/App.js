@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 
-import serviceClient from './services/noteServiceClient'
-import noteServiceClient from './services/noteServiceClient'
+import serviceClient from './services/numServiceClient'
 
 import ErrorMessage from './components/Messages/ErrorMessage'
 import SuccessMessage from './components/Messages/SuccessMessage'
 import './App.css'
-import { Switch, Route, useHistory } from 'react-router-dom'
+import { Switch, Redirect, Route, useHistory } from 'react-router-dom'
 import Header from './components/Layout/Header'
 import AuthForm from './components/SignIn/AuthForm'
 import loginService from './services/login'
@@ -59,10 +58,10 @@ const App = () => {
                 'loggedBookappUser',
                 JSON.stringify(user)
             )
-            noteServiceClient.setToken(user.token)
+            serviceClient.setToken(user.token)
             history.push('/phonebook')
         } catch (exception) {
-            console.log('expeeee', exception)
+            console.log('exception', exception)
             console.log('error on login:', exception.response.data)
 
             if (JSON.stringify(exception.response.data).includes('unique')) {
@@ -126,7 +125,7 @@ const App = () => {
                 const update = persons.find((n) => n.id === id)
                 const changedNum = { ...update, number: personObject.number }
 
-                noteServiceClient
+                serviceClient
                     .update(id, changedNum)
                     .then((returnedPerson) => {
                         setPersons(
@@ -157,7 +156,7 @@ const App = () => {
 
         //create person:
         else {
-            noteServiceClient
+            serviceClient
                 .create(personObject)
                 .then((newObject) => {
                     setPersons(persons.concat(newObject))
@@ -205,6 +204,8 @@ const App = () => {
               param.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())
           )
 
+    // console.log('results', results)
+
     //   console.log('results', results.filter((p) => p.name.toLowerCase().includes(searchTerm.toLocaleLowerCase())))
 
     const handleDelete = (e) => {
@@ -215,7 +216,7 @@ const App = () => {
         const findId = { ...persons.find((param) => param.id === id) }
 
         if (window.confirm(`Delete ${findId.name} ?`)) {
-            noteServiceClient
+            serviceClient
                 .remove(id)
                 .then(() => {
                     const filterById = copyOfPersons.filter(
@@ -238,7 +239,7 @@ const App = () => {
 
     const logOut = () => {
         window.localStorage.clear()
-        noteServiceClient.setToken(null)
+        serviceClient.setToken(null)
         setShowSignUp(false)
         setShowLogIn(false)
         setLoggedIn(false)
@@ -251,6 +252,12 @@ const App = () => {
     return (
         <div>
             <Switch>
+                {storedToken && (
+                    <Route path='/' exact>
+                        <Redirect to='/phonebook'></Redirect>
+                    </Route>
+                )}
+
                 <Route path='/' exact>
                     <SignIn
                         setShowSignUp={setShowSignUp}
@@ -258,6 +265,8 @@ const App = () => {
                     />
                 </Route>
                 <Route path='/login'>
+                    <ErrorMessage errorMessage={errorMessage} />
+                    <SuccessMessage successMessage={successMessage} />
                     <AuthForm
                         handleLogin={handleLogin}
                         loggedIn={loggedIn}
@@ -266,6 +275,8 @@ const App = () => {
                     />
                 </Route>
                 <Route path='/register'>
+                    <ErrorMessage errorMessage={errorMessage} />
+                    <SuccessMessage successMessage={successMessage} />
                     <AuthForm
                         handleLogin={handleLogin}
                         loggedIn={loggedIn}

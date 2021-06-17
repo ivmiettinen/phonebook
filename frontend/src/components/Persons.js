@@ -41,8 +41,6 @@ const personsSpan = {
   margin: '7px',
 };
 
-
-
 const lightGreyBox = {
   backgroundColor: 'rgba(206, 208, 200, 0.39)',
   padding: '8px',
@@ -53,7 +51,6 @@ const lightGreyBox = {
 };
 
 const buttonStyle1 = {
-  // background: '#DC143C',
   color: '#fff',
   padding: '0.5rem 0',
   cursor: 'pointer',
