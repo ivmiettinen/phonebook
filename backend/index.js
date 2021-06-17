@@ -18,7 +18,11 @@ const numbersRouter = require('./controllers/numbers')
 
 const registerRouter = require('./controllers/register')
 
+const logger = require('./utils/logger')
 
+const config = require('./utils/config')
+
+const middleware = require('./utils/middleware')
 
 app.use(express.static('build'))
 
@@ -26,31 +30,15 @@ app.use(bodyParser.json())
 
 app.use(express.json())
 
-const morgan = require('morgan')
-
-morgan.token('post-testing', function (req) {
-    return JSON.stringify(req.body)
-})
-
-app.use(
-    morgan(
-        ':method  :url :status :res[content-length] - :response-time ms :post-testing'
-    )
-)
-
 const PORT = process.env.PORT || 3001
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 })
 
-
-
-const url = process.env.MONGODB_URI
-
-console.log('connecting to', url)
+logger.info('connecting to', config.MONGODB_URI)
 mongoose
-    .connect(url, {
+    .connect(config.MONGODB_URI, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         useCreateIndex: true,
@@ -62,8 +50,9 @@ mongoose
         console.log('error connecting to MongoDB:', error.message)
     })
 
+app.use(middleware.requestLogger)
 
-
+app.use(middleware.tokenExtractor)
 
 app.use('/api/login', loginRouter)
 
@@ -71,26 +60,9 @@ app.use('/api/persons', numbersRouter)
 
 app.use('/api/register', registerRouter)
 
+//unknown endpoints and request handling:
 
-
-//unknown endpoints:
-const unknownEndpoint = (request, response) => {
-    response.status(404).send({ error: 'unknown endpoint' })
-}
-app.use(unknownEndpoint)
-
-const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
-
-    if (error.name === 'CastError') {
-        return response.status(400).send({ error: 'malformatted id' })
-    } else if (error.name === 'ValidationError') {
-        return response.status(400).json({ error: error.message })
-    }
-
-    next(error)
-}
-
-app.use(errorHandler)
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 
 module.exports = app

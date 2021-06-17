@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'api/persons';
+const baseUrl = 'http://localhost:3001/api/persons';
 
 let token = null
 
@@ -12,13 +12,14 @@ const getAll = () => {
   return request.then((response) => response.data);
 };
 
-const create = (newObject) => {
+const create = async (newObject) => {
   const config = {
-    headers: { Authorization: token },
+      headers: { Authorization: token },
+  }
+
+  const response = await axios.post(baseUrl, newObject, config)
+  return response.data
 }
-  const request = axios.post(baseUrl, newObject, config);
-  return request.then((response) => response.data);
-};
 
 const remove = (id) => {
   const config = {
@@ -33,4 +34,4 @@ const update = (id, newObject) => {
   return request.then((response) => response.data);
 };
 
-export default { getAll, create, remove, update, setToken };
+export default { getAll, create, remove, update, setToken, token };

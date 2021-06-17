@@ -16,6 +16,7 @@ import SignIn from './components/SignIn/SignIn'
 
 const App = () => {
     const [persons, setPersons] = useState([])
+    const [user, setUser] = useState(null)
     const [newName, setNewName] = useState('')
     const [newNumber, setnewNumber] = useState('')
     const [searchTerm, setsearchTerm] = useState('')
@@ -26,9 +27,7 @@ const App = () => {
     const [showLogIn, setShowLogIn] = useState(false)
     // const [startMenu, setShowStartMenu] = useState(true)
 
-    const storedToken = localStorage.getItem('loggedBookappUser')
-
-    console.log('storedToken', storedToken)
+    const storedToken = localStorage.getItem('loggedPhoneAppUser')
 
     const history = useHistory()
 
@@ -44,8 +43,16 @@ const App = () => {
             })
     }, [])
 
+    useEffect(() => {
+        const loggedUserJSON = window.localStorage.getItem('loggedPhoneAppUser')
+        if (loggedUserJSON) {
+            const user = JSON.parse(loggedUserJSON)
+            setUser(user)
+            serviceClient.setToken(user.token)
+        }
+    }, [])
+
     const handleLogin = async (userInfo) => {
-        console.log('userinfofff', userInfo)
         let user
         try {
             if (showLogIn) {
@@ -55,10 +62,12 @@ const App = () => {
             }
             setLoggedIn(true)
             window.localStorage.setItem(
-                'loggedBookappUser',
+                'loggedPhoneAppUser',
                 JSON.stringify(user)
             )
+
             serviceClient.setToken(user.token)
+            setUser(userInfo)
             history.push('/phonebook')
         } catch (exception) {
             console.log('exception', exception)
@@ -84,7 +93,8 @@ const App = () => {
         }
     }
 
-    const addNewPerson = (e) => {
+    const addNewPerson = async (e) => {
+
         e.preventDefault()
 
         const personObject = {
@@ -125,60 +135,60 @@ const App = () => {
                 const update = persons.find((n) => n.id === id)
                 const changedNum = { ...update, number: personObject.number }
 
-                serviceClient
-                    .update(id, changedNum)
-                    .then((returnedPerson) => {
-                        setPersons(
-                            persons.map((per) =>
-                                per.id !== id ? per : returnedPerson
-                            )
-                        )
-                        setSuccessMessage(
-                            `Changed ${newName}'s phone number successfully`
-                        )
-                        setTimeout(() => {
-                            setSuccessMessage(null)
-                        }, 5000)
-                    })
+                try {
+                    const update = await serviceClient.update(id, changedNum)
 
-                    .catch((error) => {
-                        console.log('error on put:', error)
-                        setErrorMessage(
-                            `Information of ${newName} has already been removed from server`
-                        )
-                        setTimeout(() => {
-                            setErrorMessage(null)
-                        }, 5000)
-                        setPersons(persons.filter((n) => n.id !== id))
-                    })
+                    setPersons(
+                        persons.map((per) => (per.id !== id ? per : update))
+                    )
+                    setSuccessMessage(
+                        `Changed ${newName}'s phone number successfully`
+                    )
+                    setTimeout(() => {
+                        setSuccessMessage(null)
+                    }, 5000)
+                } catch (exception) {
+                    console.log('error on put:', exception)
+                    setErrorMessage(
+                        `Information of ${newName} has already been removed from server`
+                    )
+                    setTimeout(() => {
+                        setErrorMessage(null)
+                    }, 5000)
+                    setPersons(persons.filter((n) => n.id !== id))
+                }
             }
         }
 
         //create person:
         else {
-            serviceClient
-                .create(personObject)
-                .then((newObject) => {
-                    setPersons(persons.concat(newObject))
-                    setSuccessMessage(`Added ${newName}`)
-                    setTimeout(() => {
-                        setSuccessMessage(null)
-                    }, 5000)
-                })
-                .catch((error) => {
-                    // console.log("error.response.data:", error.response.data);
-                    const stringifyResult = JSON.stringify(error.response.data)
+            console.log('create person starts')
+            try {
+                const waitNumbers = await serviceClient.create(
+                    personObject,
+                    user.token
+                )
 
-                    if (
-                        personObject.name.length < 3 ||
-                        personObject.number.length < 8
-                    ) {
-                        setErrorMessage(`${stringifyResult}`)
-                        setTimeout(() => {
-                            setErrorMessage(null)
-                        }, 9000)
-                    }
-                })
+                setPersons(persons.concat(waitNumbers))
+                setSuccessMessage(`Added ${newName}`)
+                setTimeout(() => {
+                    setSuccessMessage(null)
+                }, 5000)
+            } catch (exception) {
+                console.log('errorr', exception.response)
+                // console.log("error.response.data:", error.response.data);
+                const stringifyResult = JSON.stringify(exception.response.data)
+
+                if (
+                    personObject.name.length < 3 ||
+                    personObject.number.length < 8
+                ) {
+                    setErrorMessage(`${stringifyResult}`)
+                    setTimeout(() => {
+                        setErrorMessage(null)
+                    }, 5000)
+                }
+            }
         }
 
         setNewName('')
