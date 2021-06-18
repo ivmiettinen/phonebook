@@ -19,6 +19,7 @@ const Filter = ({ handleNameFilter, searchTerm }) => {
 
 const filterField = {
   textAlign: 'center',
+  borderRadius: '0.3rem',
 };
 
 const filterDiv = {

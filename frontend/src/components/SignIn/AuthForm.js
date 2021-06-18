@@ -29,10 +29,21 @@ const AuthForm = ({ handleLogin, loggedIn, setErrorMessage, showLogIn }) => {
         }
     }
 
+    const changeBackground = (e) => {
+        e.target.style.background = 'rgba(145, 137, 137, 0.78)'
+    }
+
+    const changeBackground2 = (e) => {
+        e.target.style.background = 'grey'
+    }
+
+
     return (
         <div style={authFormDiv}>
+            <h1 style={h1Header}>Phonebook</h1>
             <form onSubmit={handleSignIn}>
-                <h2>sign in</h2>
+                
+                {/* <h3>{showLogIn ? 'Login' : 'Register' }</h3> */}
                 <p>
                     <label style={loginLabel}>
                         <input
@@ -59,14 +70,19 @@ const AuthForm = ({ handleLogin, loggedIn, setErrorMessage, showLogIn }) => {
                     </label>
                 </p>
                 <p>
-                    <button style={authFormButton} type='submit'>
-                        {showLogIn ? 'login' : 'Register' }
+                    <button style={authFormButton} type='submit'                 onMouseEnter={changeBackground}
+                onMouseLeave={changeBackground2}>
+                        {showLogIn ? 'Login' : 'Register' }
                     </button>
                 </p>
             </form>
         </div>
     )
 }
+const h1Header = {
+    textDecorationLine: 'underline'
+}
+
 const authFormButton = {
     font: 'inherit',
     border: 'rgba(222, 219, 230, 0.88)',

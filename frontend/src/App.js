@@ -298,7 +298,7 @@ const App = () => {
                 {(loggedIn || storedToken) && (
                     <Route path='/phonebook'>
                         <div>
-                            <Header logOut={logOut} />
+                            <Header user={user} logOut={logOut} />
                             <ErrorMessage errorMessage={errorMessage} />
                             <SuccessMessage successMessage={successMessage} />
                             <PersonForm

@@ -17,16 +17,38 @@ const SignIn = ({ setShowSignUp, setShowLogIn }) => {
         history.push('/login')
     }
 
+    const changeBackground = (e) => {
+        e.target.style.background = 'rgba(145, 137, 137, 0.78)'
+    }
+
+    const changeBackground2 = (e) => {
+        e.target.style.background = 'grey'
+    }
+
     return (
         <div style={signInDiv}>
-            <button style={SignInButtons} onClick={loginBtnHandler}>
+            <h1 style={h1Header}>Phonebook</h1>
+            <button
+                style={SignInButtons}
+                onClick={loginBtnHandler}
+                onMouseEnter={changeBackground}
+                onMouseLeave={changeBackground2}
+            >
                 Login
             </button>
-            <button style={SignInButtons} onClick={registerButtonHandler}>
+            <button
+                style={SignInButtons}
+                onClick={registerButtonHandler}
+                onMouseEnter={changeBackground}
+                onMouseLeave={changeBackground2}
+            >
                 Register
             </button>
         </div>
     )
+}
+const h1Header = {
+    textDecorationLine: 'underline'
 }
 
 const signInDiv = {
@@ -35,7 +57,7 @@ const signInDiv = {
     margin: '2rem auto',
     width: '50rem',
     maxWidth: '95%',
-    borderRadius: '12px',
+    borderRadius: '0.8rem',
     display: 'flex',
     justifyContent: 'center',
     opacity: '0.9',
@@ -47,7 +69,6 @@ const signInDiv = {
     top: '40%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-
 }
 
 const SignInButtons = {
@@ -57,7 +78,7 @@ const SignInButtons = {
     color: 'white',
     padding: '0.25rem 1rem',
     cursor: 'pointer',
-    borderRadius: '12px',
+    borderRadius: '0.8rem',
     margin: '1rem',
 }
 

@@ -75,20 +75,25 @@ const nameLabel = {
     alignItems: 'center',
     marginBottom: '6px',
 }
-const nameInput = {
-    marginTop: '5px',
-    textAlign: 'center',
-}
+
 
 const numberLabel = {
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: '6px',
+
+}
+
+const nameInput = {
+    marginTop: '5px',
+    textAlign: 'center',
+    borderRadius: '0.3rem',
 }
 
 const numberInput = {
     marginTop: '5px',
     textAlign: 'center',
+    borderRadius: '0.3rem',
 }
 
 const submitButtonParagraph = {
