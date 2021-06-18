@@ -28,8 +28,6 @@ numbersRouter.get('/', (req, res, next) => {
 //GET ONE PERSON-ROUTE
 
 numbersRouter.get('/:id', (req, res, next) => {
-    const id = req.params.id
-
     PhoneNumber.findById(req.params.id)
         .then((person) => {
             if (person) {
@@ -80,12 +78,31 @@ numbersRouter.post('/', async (req, res, next) => {
 
 //DELETE PERSON-ROUTE:
 
-numbersRouter.delete('/:id', (req, res, next) => {
-    PhoneNumber.findByIdAndRemove(req.params.id)
-        .then(() => {
-            res.status(204).end()
-        })
-        .catch((error) => next(error))
+numbersRouter.delete('/:id', async (req, res, next) => {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+    if (!req.token || !decodedToken.id) {
+        return res.status(401).json({ error: 'token missing or invalid' })
+    }
+    const person = await Person.findById(decodedToken.id)
+
+    const phoneNumber = await PhoneNumber.findById(req.params.id)
+
+    if (person._id.toString() !== phoneNumber.person.toString()) {
+        //Deleter of the blog is not the same person as blog's adder
+        return res.status(400).json({ error: 'invalid user' })
+    }
+
+    if (!req.token || !decodedToken.id) {
+        return res.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    try {
+        await PhoneNumber.findByIdAndRemove(req.params.id)
+        res.status(204).end()
+    } catch (exception) {
+        next(exception)
+    }
 })
 
 //PERSON PUT:

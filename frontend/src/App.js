@@ -162,7 +162,6 @@ const App = () => {
 
         //create person:
         else {
-            console.log('create person starts')
             try {
                 const waitNumbers = await serviceClient.create(
                     personObject,
