@@ -33,15 +33,19 @@ const App = () => {
 
     //Get data:
     useEffect(() => {
-        serviceClient
-            .getAll()
-            .then((initialPersons) => {
-                setPersons(initialPersons)
-            })
-            .catch((error) => {
-                console.log('error', error)
-            })
-    }, [])
+        if (loggedIn) {
+            serviceClient
+                .getAll()
+                .then((initialPersons) => {
+                    setPersons(initialPersons)
+                })
+                .catch((error) => {
+                    console.log('error', error)
+                })
+        } else {
+            setPersons([])
+        }
+    }, [loggedIn])
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedPhoneAppUser')
@@ -94,7 +98,6 @@ const App = () => {
     }
 
     const addNewPerson = async (e) => {
-
         e.preventDefault()
 
         const personObject = {

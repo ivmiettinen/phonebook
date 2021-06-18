@@ -10,7 +10,7 @@ const tokenExtractor = (request, response, next) => {
 
 const requestLogger = (request, response, next) => {
 
-    console.log('JA BODY', request.body)
+    console.log('Request.body', request.body)
 
     logger.info('Method:', request.method)
     logger.info('Path:  ', request.path)

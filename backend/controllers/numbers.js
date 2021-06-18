@@ -17,12 +17,22 @@ numbersRouter.get('/info', (req, res) => {
 
 //GET PERSONS-ROUTE:
 
-numbersRouter.get('/', (req, res, next) => {
-    PhoneNumber.find({})
-        .then((numbers) => {
-            res.json(numbers.map((nums) => nums.toJSON()))
-        })
-        .catch((error) => next(error))
+numbersRouter.get('/', async (req, res, next) => {
+    const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+    if (!req.token || !decodedToken.id || req.token === null) {
+        return res.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const uniqueUser = await Person.findById(decodedToken.id)
+
+    try {
+        const phoneNumber = await PhoneNumber.find({ person: uniqueUser })
+
+        res.json(phoneNumber.map((nums) => nums.toJSON()))
+    } catch (exception) {
+        next(exception)
+    }
 })
 
 //GET ONE PERSON-ROUTE
