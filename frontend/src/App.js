@@ -23,9 +23,7 @@ const App = () => {
     const [errorMessage, setErrorMessage] = useState(null)
     const [successMessage, setSuccessMessage] = useState(null)
     const [loggedIn, setLoggedIn] = useState(false)
-    const [showSignUp, setShowSignUp] = useState(false)
     const [showLogIn, setShowLogIn] = useState(false)
-    // const [startMenu, setShowStartMenu] = useState(true)
 
     const storedToken = localStorage.getItem('loggedPhoneAppUser')
 
@@ -75,7 +73,6 @@ const App = () => {
             history.push('/phonebook')
         } catch (exception) {
             console.log('exception', exception)
-            console.log('error on login:', exception.response.data)
 
             if (JSON.stringify(exception.response.data).includes('unique')) {
                 setErrorMessage(`Email '${userInfo.email}' is already in use`)
@@ -177,7 +174,6 @@ const App = () => {
                     setSuccessMessage(null)
                 }, 5000)
             } catch (exception) {
-                console.log('errorr', exception.response)
                 // console.log("error.response.data:", error.response.data);
                 const stringifyResult = JSON.stringify(exception.response.data)
 
@@ -252,7 +248,6 @@ const App = () => {
     const logOut = () => {
         window.localStorage.clear()
         serviceClient.setToken(null)
-        setShowSignUp(false)
         setShowLogIn(false)
         setLoggedIn(false)
         setSuccessMessage('Successfully logged out')
@@ -271,10 +266,7 @@ const App = () => {
                 )}
 
                 <Route path='/' exact>
-                    <SignIn
-                        setShowSignUp={setShowSignUp}
-                        setShowLogIn={setShowLogIn}
-                    />
+                    <SignIn setShowLogIn={setShowLogIn} />
                 </Route>
                 <Route path='/login'>
                     <ErrorMessage errorMessage={errorMessage} />

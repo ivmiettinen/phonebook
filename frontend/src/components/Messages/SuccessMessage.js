@@ -7,7 +7,7 @@ const SuccessMessage = ({ successMessage }) => {
     }
 
     return (
-      <div className='success'>
+        <div className='success'>
             <Alert severity='success'>{successMessage}</Alert>
         </div>
     )

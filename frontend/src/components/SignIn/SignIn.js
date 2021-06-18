@@ -1,11 +1,10 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
 
-const SignIn = ({ setShowSignUp, setShowLogIn }) => {
+const SignIn = ({ setShowLogIn }) => {
     const history = useHistory()
 
     const registerButtonHandler = () => {
-        setShowSignUp(true)
         setShowLogIn(false)
 
         history.push('/register')
@@ -13,7 +12,6 @@ const SignIn = ({ setShowSignUp, setShowLogIn }) => {
 
     const loginBtnHandler = () => {
         setShowLogIn(true)
-        setShowSignUp(false)
         history.push('/login')
     }
 

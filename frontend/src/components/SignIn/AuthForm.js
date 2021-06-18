@@ -37,13 +37,10 @@ const AuthForm = ({ handleLogin, loggedIn, setErrorMessage, showLogIn }) => {
         e.target.style.background = 'grey'
     }
 
-
     return (
         <div style={authFormDiv}>
             <h1 style={h1Header}>Phonebook</h1>
             <form onSubmit={handleSignIn}>
-                
-                {/* <h3>{showLogIn ? 'Login' : 'Register' }</h3> */}
                 <p>
                     <label style={loginLabel}>
                         <input
@@ -70,9 +67,13 @@ const AuthForm = ({ handleLogin, loggedIn, setErrorMessage, showLogIn }) => {
                     </label>
                 </p>
                 <p>
-                    <button style={authFormButton} type='submit'                 onMouseEnter={changeBackground}
-                onMouseLeave={changeBackground2}>
-                        {showLogIn ? 'Login' : 'Register' }
+                    <button
+                        style={authFormButton}
+                        type='submit'
+                        onMouseEnter={changeBackground}
+                        onMouseLeave={changeBackground2}
+                    >
+                        {showLogIn ? 'Login' : 'Register'}
                     </button>
                 </p>
             </form>
@@ -80,7 +81,7 @@ const AuthForm = ({ handleLogin, loggedIn, setErrorMessage, showLogIn }) => {
     )
 }
 const h1Header = {
-    textDecorationLine: 'underline'
+    textDecorationLine: 'underline',
 }
 
 const authFormButton = {

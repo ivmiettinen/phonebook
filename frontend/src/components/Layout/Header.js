@@ -10,24 +10,22 @@ const Header = ({ logOut, user }) => {
         history.push('/')
     }
 
-    console.log('user', user)
-
     const currentUser = user ? [user].map((p) => p.email) : null
-    // {currentUser}`s
     return (
         <header className='header'>
             <div className='column corner'>
-                <button className='headerButton'>{currentUser}`s  Phonebook</button>
+                <button className='headerButton'>
+                    {currentUser}`s Phonebook
+                </button>
             </div>
             <div className='column middle'></div>
             <div className='column corner'>
-                <button className='logOutButton' onClick={handleLogout}>Logout</button>
+                <button className='logOutButton' onClick={handleLogout}>
+                    Logout
+                </button>
             </div>
         </header>
     )
 }
-
-
-
 
 export default Header

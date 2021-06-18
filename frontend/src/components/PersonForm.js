@@ -1,7 +1,6 @@
 import React from 'react'
 import Filter from './Filter'
 
-
 const PersonForm = ({
     addNewPerson,
     newName,
@@ -27,9 +26,9 @@ const PersonForm = ({
     return (
         <div style={peronFormStyle}>
             <Filter
-                                searchTerm={searchTerm}
-                                handleNameFilter={handleNameFilter}
-                            />
+                searchTerm={searchTerm}
+                handleNameFilter={handleNameFilter}
+            />
             <div style={addPersonBox}>
                 <h3>Add a new person:</h3>
                 <form onSubmit={addNewPerson}>
@@ -76,12 +75,10 @@ const nameLabel = {
     marginBottom: '6px',
 }
 
-
 const numberLabel = {
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: '6px',
-
 }
 
 const nameInput = {
@@ -120,7 +117,5 @@ const addPersonBox = {
 
     padding: '10px',
 }
-
-
 
 export default PersonForm
